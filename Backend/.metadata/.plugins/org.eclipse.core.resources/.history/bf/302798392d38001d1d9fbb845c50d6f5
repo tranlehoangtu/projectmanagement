@@ -1,0 +1,5 @@
+package com.javacode.project.domain.model.dto;
+
+public record AuthRequest {
+
+}

@@ -1,0 +1,44 @@
+package com.javacode.project.service.impl;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.javacode.project.domain.Project;
+import com.javacode.project.repository.ProjectRepository;
+import com.javacode.project.service.ProjectService;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class ProjectServiceImpl implements ProjectService{
+
+	private final ProjectRepository projectRepository;
+
+	@Override
+	public List<Project> findAll() {
+		return projectRepository.findAll();
+	}
+
+	@Override
+	public <S extends Project> S insert(S entity) {
+		return projectRepository.insert(entity);
+	}
+	
+	@Override
+	public Optional<Project> findById(String id) {
+		return projectRepository.findById(id);
+	}
+
+	@Override
+	public <S extends Project> S save(S entity) {
+		return projectRepository.save(entity);
+	}
+	
+	@Override
+	public List<Project> findByProjectName(String projectName) {
+		return projectRepository.findByProjectName(projectName);
+	}
+}

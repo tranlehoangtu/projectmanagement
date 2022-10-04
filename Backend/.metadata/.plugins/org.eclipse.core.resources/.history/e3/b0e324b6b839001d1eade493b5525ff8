@@ -1,0 +1,28 @@
+package com.javacode.Spring.Security.service;
+
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.javacode.Spring.Security.domain.model.Student;
+import com.javacode.Spring.Security.repository.StudentRepo;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Service
+public class StudentService {
+	private final StudentRepo studentRepo;
+
+	public Student insert(Student student) {
+		return studentRepo.insert(student);
+	}
+	
+	public Optional<Student> findByUserId(String userId) {
+		return studentRepo.findByStudentId(userId);
+	}
+//	
+//	public Optional<Student> findByStudentId(String studentId) {
+//		return studentRepo.findByStudentId(studentId);
+//	}
+}

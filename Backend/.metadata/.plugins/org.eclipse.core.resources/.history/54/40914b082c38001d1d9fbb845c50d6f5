@@ -1,0 +1,20 @@
+package com.javacode.project.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.javacode.project.domain.model.Project;
+
+public interface ProjectService {
+
+	<S extends Project> S insert(S entity);
+
+	List<Project> findAll();
+
+	Optional<Project> findById(String id);
+
+	<S extends Project> S save(S entity);
+
+	List<Project> findByProjectName(String projectName);
+
+}

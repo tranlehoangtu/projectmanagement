@@ -1,0 +1,21 @@
+package com.javacode.Spring.Security.service;
+
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.javacode.Spring.Security.domain.model.Project;
+import com.javacode.Spring.Security.repository.ProjectRepo;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class ProjectService {
+
+	private final ProjectRepo projectRepo;
+
+	public Optional<Project> findByProjectId(String id) {
+		return projectRepo.findById(id);
+	}
+}

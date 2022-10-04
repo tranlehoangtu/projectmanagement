@@ -1,0 +1,71 @@
+package com.javacode.Spring.Security.api;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.security.RolesAllowed;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.javacode.Spring.Security.domain.model.Project;
+import com.javacode.Spring.Security.domain.model.Role;
+import com.javacode.Spring.Security.service.ProjectService;
+
+import lombok.RequiredArgsConstructor;
+
+@CrossOrigin
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("api")
+public class ProjectApi {
+	private final ProjectService projectService;
+
+	@RolesAllowed({Role.STUDENT, Role.MANAGEMENT})
+	@GetMapping("project/{id}")
+	public ResponseEntity<Project> getProject(@PathVariable(name = "id") String id) {
+		return projectService
+				.findById(id)
+				.map(project -> ResponseEntity.ok().body(project))
+				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+	
+	@RolesAllowed({Role.STUDENT, Role.ADMIN})
+	@PutMapping("project")
+	public ResponseEntity<Project> updateProject(@RequestParam("members") boolean isMember, @RequestBody Map<String, Object> data) {
+		String projectId = (String) data.get("projectId");
+		List<?> members = (ArrayList<?>) data.get("members");
+		
+		Project project=  projectService.findById(projectId).get();
+		members.forEach(member -> project.getMembers().add((String) member));
+		
+		return ResponseEntity.ok().body(projectService.save(project));
+	}
+	
+	@RolesAllowed({Role.STUDENT, Role.ADMIN})
+	@PutMapping("project")
+	public ResponseEntity<Project> ssupdateProject(@RequestParam("members") boolean isMember, @RequestBody Map<String, Object> data) {
+		String projectId = (String) data.get("projectId");
+		List<?> members = (ArrayList<?>) data.get("members");
+		
+		Project project=  projectService.findById(projectId).get();
+		members.forEach(member -> project.getMembers().add((String) member));
+		
+		return ResponseEntity.ok().body(projectService.save(project));
+	}
+	
+	@RolesAllowed({Role.STUDENT, Role.MANAGEMENT})
+	@GetMapping("projects")
+	public ResponseEntity<List<Project>> getProjects(@RequestParam String type, @RequestBody Map<String, Object> list) {
+		System.out.println(list.get("ids"));
+		return null;
+	}
+}

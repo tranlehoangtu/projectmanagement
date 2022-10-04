@@ -1,0 +1,24 @@
+package com.javacode.Spring.Security.domain.model;
+
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Document(collection = "comments")
+public class Comment {
+	@Id
+	private String id;
+	private String body;
+	private String username;
+	private String userId;
+	private String parentId;
+	private LocalDateTime createAt;
+}

@@ -1,0 +1,75 @@
+package com.javacode.Spring.Security.api;
+
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.javacode.Spring.Security.domain.dto.ListOfString;
+import com.javacode.Spring.Security.domain.model.Project;
+import com.javacode.Spring.Security.domain.model.Role;
+import com.javacode.Spring.Security.domain.model.Student;
+import com.javacode.Spring.Security.service.ProjectService;
+import com.javacode.Spring.Security.service.StudentService;
+
+import lombok.RequiredArgsConstructor;
+
+@CrossOrigin
+@RequestMapping("api")
+@RestController
+@RequiredArgsConstructor
+public class StudentApi {
+	private final StudentService studentService;
+	private final ProjectService projectService;
+//
+//	@RolesAllowed({Role.STUDENT, Role.MANAGEMENT})
+//	@GetMapping("student/{userId}")
+//	public ResponseEntity<Student> getStudentByUserId(@PathVariable(name = "userId") String id) {
+//		return studentService
+//				.findByUserId(id)
+//				.map(student -> ResponseEntity.ok().body(student))
+//				.orElseGet(() -> ResponseEntity.ok(null));
+//	}
+//	
+	@RolesAllowed({Role.STUDENT, Role.MANAGEMENT})
+	@GetMapping("student/{id}")
+	public ResponseEntity<Student> getStudentById(@PathVariable(name = "id") String id) {
+		System.out.println(id);
+		return studentService
+				.findById(id)
+				.map(student -> ResponseEntity.ok().body(student))
+				.orElseGet(() -> ResponseEntity.ok(null));
+	}
+
+	@GetMapping("student")
+	public ResponseEntity<List<Project>> getProjectsFromStudent(@RequestParam("id") String id,
+			@RequestParam("value") String value) {
+	
+		Student student = studentService.findById(id).get();
+		List<Project> projects = projectService.getProjectsFromList(student.getProjects());
+		
+		return ResponseEntity.ok().body(projects);
+	}
+	
+	@RolesAllowed({Role.STUDENT, Role.MANAGEMENT})
+	@GetMapping("students")
+	public ResponseEntity<List<Student>> getStudents() {
+		
+		return ResponseEntity.ok().body(studentService.findAll());
+	}
+
+	@RolesAllowed({Role.STUDENT, Role.ADMIN})
+	@PostMapping("students")
+	public  ResponseEntity<List<Student>> getStudents(@RequestBody ListOfString listOfString) {
+		return ResponseEntity.ok().body(studentService.findAllStudentByIds(listOfString.getListOfString()));
+	}
+}

@@ -1,0 +1,10 @@
+package com.javacode.Spring.Security.domain.dto;
+
+import java.time.LocalDateTime;
+
+public class AddCommentReq {
+	private String body;
+	private LocalDateTime createAt;
+	private LocalDateTime editAt;
+	private String username;
+}

@@ -1,0 +1,118 @@
+ package com.javacode.project.api;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.javacode.project.domain.Project;
+import com.javacode.project.domain.Student;
+import com.javacode.project.service.ProjectService;
+import com.javacode.project.service.StudentService;
+import com.javacode.project.service.TaskService;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("api/v1/project")
+@CrossOrigin
+public class ProjectApi {
+	private final ProjectService projectService;
+	private final StudentService studentService;
+	private final TaskService taskService;
+
+	@GetMapping
+	public ResponseEntity<List<Project>> getAllProject() {
+		return ResponseEntity.ok().body(projectService.findAll());
+	}
+
+	@GetMapping("{id}")
+	public ResponseEntity<Project> getProjectById(@PathVariable("id") String id) {
+
+		return projectService.findById(id).map(student -> ResponseEntity.ok().body(student))
+				.orElseGet(() -> ResponseEntity.ok().body(null));
+	}
+
+	@PostMapping("add")
+	public ResponseEntity<Project> insertProject(@RequestBody Project project) {
+
+		return ResponseEntity.ok().body(projectService.insert(project));
+	}
+
+	@PostMapping("update/{id}")
+	public ResponseEntity<Project> addMemberToProject(@RequestBody Project nProject, @PathVariable("id") String id) {
+		// get Old Project
+		Project oProject = projectService.findById(id).get();
+
+		List<String> nMembers = getUniqueValues(nProject.getMembers(), oProject.getMembers());
+
+		// add Project to each Student
+		for (String member : nMembers) {
+			Student tempStudent = studentService.findById(member).get();
+			tempStudent.getProjects().add(id);
+			tempStudent.setProjects(tempStudent.getProjects());
+			studentService.save(tempStudent);
+		}
+
+		oProject.setMembers(nProject.getMembers());
+		return ResponseEntity.ok().body(projectService.save(oProject));
+	}
+
+	@PostMapping("removeP/{id}")
+	public ResponseEntity<Project> removeStudentFromProject(@RequestBody Project nProject,
+			@PathVariable("id") String id) {
+		Project oProject = projectService.findById(id).get();
+
+		List<String> nMembers = getUniqueValues(oProject.getMembers(), nProject.getMembers());
+
+		for (String member : nProject.getMembers()) {
+			Student tempStudent = studentService.findById(member).get();
+			List<String> projects = getUniqueValues(tempStudent.getProjects(), List.of(id));
+
+			tempStudent.setProjects(projects);
+			studentService.save(tempStudent);
+		}
+
+		oProject.setMembers(nMembers);
+		return ResponseEntity.ok().body(projectService.save(oProject));
+	}
+
+	@PostMapping("removeT/{id}")
+	public ResponseEntity<Project> removeTaskFromProject(@RequestBody Project nProject, @PathVariable("id") String id) {
+
+		Project oProject = projectService.findById(id).get();
+		List<String> tasks = getUniqueValues(oProject.getTasks(), nProject.getTasks());
+
+		for (String taskId : nProject.getTasks()) {
+			taskService.deleteById(taskId);
+		}
+
+		oProject.setTasks(tasks);
+		
+		return ResponseEntity.ok().body(projectService.save(oProject));
+	}
+
+	private List<String> getUniqueValues(List<String> bArray, List<String> sArray) {
+		List<String> nArray = new ArrayList<>();
+
+		for (String nItem : bArray) {
+			boolean isUnique = true;
+			for (String oItem : sArray) {
+				if (nItem.equals(oItem)) {
+					isUnique = false;
+				}
+			}
+			if (isUnique)
+				nArray.add(nItem);
+		}
+		return nArray;
+	}
+}

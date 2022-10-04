@@ -1,0 +1,43 @@
+package com.javacode.Spring.Security.repository;
+
+import java.util.List;
+
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+import com.javacode.Spring.Security.domain.model.Task;
+
+import lombok.RequiredArgsConstructor;
+
+@Repository
+public interface TaskRepo extends MongoRepository<Task, String>, TaskRepoCustom {
+
+}
+
+interface TaskRepoCustom {
+	List<Task> findTaskByMembers(List<String> member);
+}
+
+@RequiredArgsConstructor
+class TaskRepoCustomImpl implements TaskRepoCustom {
+
+	private final MongoTemplate mongoTemplate;
+
+	@Override
+	public List<Task> findTaskByMembers(List<String> members) {
+		members.forEach(member -> {
+			Criteria regex = Criteria.where("members").regex(".*"+member+".*", "i");
+			mongoTemplate.find(new Query().addCriteria(regex), Task.class).forEach(task -> {
+				System.out.println(task.toString());
+			});
+		});
+		return null;
+		
+//		Criteria regex = Criteria.where("members").regex(".*632a94689f65a851c6149789.*", "i");   
+//		return ;
+	}
+
+}

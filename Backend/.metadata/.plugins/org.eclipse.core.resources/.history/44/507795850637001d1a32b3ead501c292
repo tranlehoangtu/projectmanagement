@@ -1,0 +1,22 @@
+//package com.javacode.project.service;
+//
+//import java.util.List;
+//import java.util.Optional;
+//
+//import com.javacode.project.domain.User;
+//
+//public interface UserService {
+//
+//	List<User> findAll();
+//
+//	User userAuthenticate(String username, String password);
+//
+//	Optional<User> findById(String id);
+//
+//	void insert(User user);
+//
+//	<S extends User> S save(S entity);
+//
+//	List<User> findByUsername(String username);
+//
+//}

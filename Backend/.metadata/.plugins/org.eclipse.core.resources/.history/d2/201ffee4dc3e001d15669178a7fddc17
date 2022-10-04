@@ -1,0 +1,41 @@
+package com.javacode.Spring.Security;
+
+import java.time.LocalDateTime;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.javacode.Spring.Security.domain.model.Comment;
+import com.javacode.Spring.Security.service.CommentService;
+
+@SpringBootApplication
+public class Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+	@Bean
+	CommandLineRunner run(CommentService service) {
+		return args -> {
+			Comment comment = new Comment();
+			comment.setBody("Hello");
+			comment.setUsername("Danh Chi Bao");
+			comment.setUserId("632b3538009cd623de48ddc4");
+			comment.setParentId(null);
+			comment.setCreateAt(LocalDateTime.now());
+			
+			service.insert(comment);
+			
+//			@Id
+//			private String id;
+//			private String body;
+//			private String username;
+//			private String userId;
+//			private String parentId;
+//			private LocalDateTime createAt;
+		};
+	}
+}

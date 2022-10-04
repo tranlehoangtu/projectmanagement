@@ -1,0 +1,41 @@
+package com.javacode.Spring.Security.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.javacode.Spring.Security.domain.model.Student;
+import com.javacode.Spring.Security.repository.StudentRepo;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Service
+public class StudentService {
+	private final StudentRepo studentRepo;
+
+	public Student insert(Student student) {
+		return studentRepo.insert(student);
+	}
+
+	public Optional<Student> findById(String id) {
+		return studentRepo.findById(id);
+	}
+
+	public Optional<Student> findByUserId(String userId) {
+		return studentRepo.findByUserId(userId);
+	}
+
+	public List<Student> findAllStudentByIds(List<String> ids) {
+		List<Student> listOfStudent = new ArrayList<>();
+		ids.forEach(id -> listOfStudent.add(studentRepo.findById(id).get()));
+
+		return listOfStudent;
+	}
+	
+	public List<Student> findAll() {
+		return studentRepo.findAll();
+	}
+}

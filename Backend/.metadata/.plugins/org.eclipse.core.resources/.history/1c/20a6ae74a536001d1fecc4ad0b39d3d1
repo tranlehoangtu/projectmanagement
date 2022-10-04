@@ -1,0 +1,15 @@
+package com.javacode.project.service.impl;
+
+import org.springframework.stereotype.Service;
+
+import com.javacode.project.repository.RoleRepository;
+import com.javacode.project.service.RoleService;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class RoleServiceImpl implements RoleService{
+	private final RoleRepository roleRepository;
+
+}

@@ -1,0 +1,21 @@
+package com.javacode.Spring.Security.domain.model;
+
+import java.util.Date;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Document(collection = "comments")
+public class Comment {
+	private String id;
+	private String body;
+	private String username;
+	private Date createAt;
+	private Date editAt;
+}

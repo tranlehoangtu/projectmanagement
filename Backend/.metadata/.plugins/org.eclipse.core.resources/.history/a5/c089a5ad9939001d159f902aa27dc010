@@ -1,0 +1,45 @@
+package com.javacode.Spring.Security.api;
+
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.javacode.Spring.Security.domain.dto.ListProject;
+import com.javacode.Spring.Security.domain.model.Project;
+import com.javacode.Spring.Security.domain.model.Role;
+import com.javacode.Spring.Security.service.ProjectService;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("api")
+public class ProjectApi {
+	private final ProjectService projectService;
+
+	@RolesAllowed(value = Role.ADMIN)
+	@GetMapping("project/{id}")
+	public ResponseEntity<Project> getProject(@PathVariable(name = "id") String id) {
+		return projectService.findByProjectId(id).map(project -> ResponseEntity.ok().body(project))
+				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
+	@RolesAllowed(value = Role.ADMIN)
+	@GetMapping("projects")
+	public ResponseEntity<List<Project>> getListOfProject(@RequestParam("value") String value) {
+		System.out.println(value);
+		return null;
+
+//		return ResponseEntity
+//					.ok()
+//					.body(projectService.getProjectsFromList(projects.getProjects()));
+	}
+}

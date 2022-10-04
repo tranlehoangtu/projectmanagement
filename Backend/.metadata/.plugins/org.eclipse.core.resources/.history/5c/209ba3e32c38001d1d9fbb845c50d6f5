@@ -1,0 +1,5 @@
+package com.javacode.project.filter;
+
+public class JwtTokenFilter {
+
+}

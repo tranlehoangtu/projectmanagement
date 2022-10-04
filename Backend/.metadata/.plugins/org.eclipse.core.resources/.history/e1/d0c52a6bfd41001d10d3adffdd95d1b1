@@ -1,0 +1,162 @@
+package com.javacode.Spring.Security.api;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.annotation.security.RolesAllowed;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.javacode.Spring.Security.domain.dto.CreateProject;
+import com.javacode.Spring.Security.domain.dto.RemoveProject;
+import com.javacode.Spring.Security.domain.model.Project;
+import com.javacode.Spring.Security.domain.model.Role;
+import com.javacode.Spring.Security.domain.model.User;
+import com.javacode.Spring.Security.service.ProjectService;
+import com.javacode.Spring.Security.service.TaskService;
+import com.javacode.Spring.Security.service.UserService;
+
+import lombok.RequiredArgsConstructor;
+
+@CrossOrigin
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("api")
+public class ProjectApi {
+	private final ProjectService projectService;
+	private final TaskService taskService;
+	private final UserService userService;
+
+	@RolesAllowed({Role.STUDENT, Role.MANAGEMENT})
+	@GetMapping("project/{id}")
+	public ResponseEntity<Project> getProject(@PathVariable(name = "id") String id) {
+		return projectService
+				.findById(id)
+				.map(project -> ResponseEntity.ok().body(project))
+				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+	
+	@RolesAllowed({Role.STUDENT, Role.MANAGEMENT})
+	@PutMapping("project")
+	public ResponseEntity<User> updateProject(@RequestParam("members") String isMember, @RequestBody Map<String, Object> data) {
+		String projectId = (String) data.get("projectId");
+		List<?> members = (List<?>) data.get("members");
+		Project project=  projectService.findById(projectId).get();
+		
+		switch (isMember) {
+		case "remove": {
+			members.forEach(member -> {
+				User user = userService.findById((String) member).get();
+				System.out.println(user.toString());
+				user.setProjects(getUniqueValues(user.getProjects(), List.of(projectId)));
+				userService.save(user);
+			});
+
+			List<String> taskIds = new ArrayList<>();
+			
+			taskService.findTaskByMembers(members, projectId).forEach(task -> {
+				taskIds.add(task.getId());
+				taskService.delete(task);
+			});
+
+			project.setTasks(getUniqueValues(project.getTasks(), taskIds));
+			project.setMembers(getUniqueValues(project.getMembers(), members));
+			
+			projectService.save(project);
+			
+			return ResponseEntity.ok().body(null);
+		}
+		case "add": {
+			User user = userService.findById((String) members.get(0)).get();
+			user.getProjects().add(projectId);
+			
+			userService.save(user);
+			
+			project.getMembers().add(user.getId());
+			projectService.save(project);
+			
+			return ResponseEntity.ok().body(user);
+		}
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + isMember);
+		}
+	}
+	
+	@RolesAllowed({Role.MANAGEMENT})
+	@PostMapping("project")
+	public ResponseEntity<Project> insertProject(@RequestBody CreateProject createProject) {
+		Project project = new Project();
+		BeanUtils.copyProperties(createProject, project);
+		
+		String userId = createProject.getUserid();
+		User user = userService.findById(userId).get();
+
+		project = projectService.insert(project);
+		user.getProjects().add(project.getId());
+		userService.save(user);
+		
+		return ResponseEntity.ok().body(project);
+	}
+	
+	@RolesAllowed({Role.MANAGEMENT})
+	@PutMapping("project/update")
+	public ResponseEntity<Project> updateProject(@RequestBody Project project) {
+		Project nProject = projectService.findById(project.getId()).get();
+		
+		nProject.setEditAt(new Date().toString());
+		nProject.setProjectName(project.getProjectName());
+		nProject.setDueDate(project.getDueDate());
+
+		
+		
+		return ResponseEntity.ok().body(nProject);
+	}
+	
+	@RolesAllowed({Role.MANAGEMENT})
+	@DeleteMapping("project")
+	public ResponseEntity<Project> deleteProject(@RequestBody RemoveProject removeProject) {
+
+		String id = removeProject.getId();
+		String userId = removeProject.getUserId();
+
+		Project project= projectService.findById(id).get();
+		
+		project.getMembers().forEach(member -> {
+			User tempUser = userService.findById(member).get();
+			tempUser.setProjects(getUniqueValues(tempUser.getProjects(), List.of(id)));
+			
+			userService.save(tempUser);
+		});
+		
+		project.getTasks().forEach(task -> {
+			taskService.delete(taskService.findById(task).get());
+		});
+		
+		projectService.delete(project);
+		
+		User user = userService.findById(userId).get();
+		user.setProjects(getUniqueValues(user.getProjects(), List.of(id)));
+		
+		userService.save(user);
+		
+		return ResponseEntity.ok(null);
+	}
+	
+	private List<String> getUniqueValues(List<String> firstList, List<?> secondList) {
+		return firstList.stream().filter(item -> !secondList.contains(item)).collect(Collectors.toList());
+	}
+}

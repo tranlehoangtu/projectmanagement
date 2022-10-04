@@ -1,0 +1,55 @@
+package com.javacode.Spring.Security.api;
+
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.javacode.Spring.Security.domain.dto.ListOfString;
+import com.javacode.Spring.Security.domain.model.Project;
+import com.javacode.Spring.Security.domain.model.Role;
+import com.javacode.Spring.Security.domain.model.Task;
+import com.javacode.Spring.Security.service.ProjectService;
+import com.javacode.Spring.Security.service.TaskService;
+
+import lombok.RequiredArgsConstructor;
+
+@CrossOrigin
+@RequestMapping("api")
+@RequiredArgsConstructor
+@RestController
+public class TaskApi {
+	private final TaskService taskService;
+	private final ProjectService projectService;
+
+	@PostMapping("tasks")
+	public ResponseEntity<List<Task>> getTasks(@RequestBody ListOfString listOfString) {
+
+		return ResponseEntity.ok().body(taskService.getTaskFromList(listOfString.getListOfString()));
+	}
+
+	@PostMapping("task")
+	public ResponseEntity<Task> insertTask(@RequestBody Task task) {
+		Project project = projectService.findByProjectId(task.getProjectId()).get();
+		Task retTask = taskService.insert(task);
+
+		project.getTasks().add(retTask.getId());
+		projectService.save(project);
+		
+		return ResponseEntity.ok().body(retTask);
+	}
+	
+	@DeleteMapping("tasks/delete")
+	public String deleteTasks(@RequestBody ListOfString listOfTaskId) {
+		System.out.println(listOfTaskId);
+		
+		return "Ngon";
+	}
+}

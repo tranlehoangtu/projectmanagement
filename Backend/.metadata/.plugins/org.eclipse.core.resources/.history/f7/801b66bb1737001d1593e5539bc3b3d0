@@ -1,0 +1,41 @@
+package com.javacode.project;
+
+import java.util.List;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.javacode.project.domain.Role;
+import com.javacode.project.domain.User;
+import com.javacode.project.service.RoleService;
+import com.javacode.project.service.UserService;
+
+@SpringBootApplication
+public class Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+	
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	CommandLineRunner run(UserService userService, RoleService roleService) {
+		return args -> {
+			List<Role> roles = roleService.findAll();
+			User nUser = new User();
+			nUser.setUsername("savedUser");
+			nUser.setPassword("1");
+			roles.forEach(role->nUser.getRoles().add(role));
+			
+			userService.save(nUser);
+		};
+	}
+}

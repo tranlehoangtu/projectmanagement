@@ -1,0 +1,16 @@
+package com.javacode.project.domain.model;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Document("roles")
+public class Role {
+	private String id;
+	private String name;
+}

@@ -1,0 +1,37 @@
+package com.javacode.project.service.impl;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.javacode.project.domain.model.Student;
+import com.javacode.project.repository.StudentRepository;
+import com.javacode.project.service.StudentService;
+
+import lombok.RequiredArgsConstructor;
+
+@Service @RequiredArgsConstructor
+public class StudentServiceImpl implements StudentService {
+	private final StudentRepository studentRepository;
+	
+	@Override
+	public <S extends Student> S insert(S entity) {
+		return studentRepository.insert(entity);
+	}
+
+	@Override
+	public Optional<Student> findById(String id) {
+		return studentRepository.findById(id);
+	}
+
+	@Override
+	public List<Student> findAll() {
+		return studentRepository.findAll();
+	}
+
+	@Override
+	public <S extends Student> S save(S entity) {
+		return studentRepository.save(entity);
+	}
+}

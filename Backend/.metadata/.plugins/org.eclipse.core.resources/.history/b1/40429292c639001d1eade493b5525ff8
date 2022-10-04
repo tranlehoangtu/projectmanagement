@@ -1,0 +1,35 @@
+package com.javacode.Spring.Security;
+
+import java.time.LocalDateTime;
+import java.util.Set;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.javacode.Spring.Security.domain.model.Role;
+import com.javacode.Spring.Security.domain.model.User;
+import com.javacode.Spring.Security.repository.UserRepo;
+
+@SpringBootApplication
+public class Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+	@Bean
+	CommandLineRunner run(UserRepo userRepo) {
+		return args->{
+			User b1805844 = new User();
+			b1805844.setUsername("b1805831");
+			b1805844.setPassword("1");
+			b1805844.setCreatedAt(LocalDateTime.now());
+			b1805844.setModifiedAt(LocalDateTime.now());
+			b1805844.setAuthorities(Set.of(new Role(Role.STUDENT)));
+
+			userRepo.insert(b1805844);
+		};
+	}
+}

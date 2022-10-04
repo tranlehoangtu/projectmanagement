@@ -1,0 +1,29 @@
+package com.javacode.project.service.impl;
+
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.javacode.project.domain.model.Teacher;
+import com.javacode.project.repository.TeacherRepository;
+import com.javacode.project.service.TeacherService;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class TeacherServiceImpl implements TeacherService {
+
+	private final TeacherRepository teacherRepository;
+
+	@Override
+	public <S extends Teacher> S insert(S entity) {
+		return teacherRepository.insert(entity);
+	}
+
+	@Override
+	public Optional<Teacher> findById(String id) {
+		return teacherRepository.findById(id);
+	}
+
+}

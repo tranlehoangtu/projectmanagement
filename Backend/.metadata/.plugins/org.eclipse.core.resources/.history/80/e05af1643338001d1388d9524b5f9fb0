@@ -1,0 +1,9 @@
+package com.javacode.Spring.Security.service;
+
+import com.javacode.Spring.Security.domain.model.User;
+
+public interface UserService {
+
+	User insertUser(User user);
+	
+}

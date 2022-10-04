@@ -1,0 +1,13 @@
+package com.javacode.project.service;
+
+import java.util.Optional;
+
+import com.javacode.project.domain.Role;
+
+public interface RoleService {
+
+	<S extends Role> S insert(S entity);
+
+	Optional<Role> findByName(String name);
+
+}

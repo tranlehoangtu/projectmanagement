@@ -1,0 +1,24 @@
+package com.javacode.Spring.Security.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.javacode.Spring.Security.domain.model.Teacher;
+import com.javacode.Spring.Security.repository.TeacherRepo;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class TeacherService {
+	private final TeacherRepo teacherRepo;
+	
+	public List<Teacher> findAllTeacherByIds(List<String> ids) {
+		List<Teacher> listOfTeacher = new ArrayList<>();
+		ids.forEach(id -> listOfTeacher.add(teacherRepo.findById(id).get()));
+
+		return listOfTeacher;
+	}
+}

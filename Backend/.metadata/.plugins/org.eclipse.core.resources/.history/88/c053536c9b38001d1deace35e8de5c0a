@@ -1,0 +1,5 @@
+package com.javacode.Spring.Security.domain.dto;
+
+public class UserRes {
+
+}

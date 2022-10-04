@@ -1,0 +1,25 @@
+package com.javacode.Spring.Security;
+
+import java.util.List;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.javacode.Spring.Security.repository.TaskRepo;
+import com.javacode.Spring.Security.service.TaskService;
+
+@SpringBootApplication
+public class Application {
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+	@Bean
+	CommandLineRunner run(TaskRepo taskRepo) {
+		return args -> {
+			System.out.println(taskRepo.findAnyOfTheseValues(List.of("632b3538009cd623de48ddc4")));
+		};
+	}
+}

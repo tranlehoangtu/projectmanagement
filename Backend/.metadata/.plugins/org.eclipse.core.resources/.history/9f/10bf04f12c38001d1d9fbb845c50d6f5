@@ -1,0 +1,5 @@
+package com.javacode.project.security;
+
+public class SecurityConfig {
+
+}

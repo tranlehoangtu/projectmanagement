@@ -1,0 +1,25 @@
+package com.javacode.project;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.javacode.project.service.RoleService;
+import com.javacode.project.service.UserService;
+
+@SpringBootApplication
+public class ProjectManagementApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ProjectManagementApplication.class, args);
+	}
+	
+	@Bean
+	CommandLineRunner run(UserService userService, RoleService roleService) {
+		return args -> {
+			
+		};
+	}
+
+}

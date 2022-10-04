@@ -1,0 +1,4 @@
+package com.javacode.project.service;
+
+public interface UserService {
+}

@@ -1,0 +1,81 @@
+package com.javacode.Spring.Security.domain.model;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Document(collection = "users")
+@Getter
+@Setter
+public class User implements UserDetails {
+
+	private static final long serialVersionUID = 6636084715067294294L;
+
+	@Id
+	private String id;
+
+	@CreatedDate
+	private Date createdAt;
+	@LastModifiedDate
+	private Date modifiedAt;
+
+	private boolean enabled = true;
+
+	@Indexed(unique = true)
+	private String username;
+	private String password;
+	@Indexed
+	private Set<Role> authorities = new HashSet<>();
+	private String fullName;
+	private List<String> projects = new ArrayList<>();
+	private List<String> notifications = new ArrayList<>();
+	private String phoneNumber;
+	private String address;
+	private String email;
+	private String school;
+	private String gender;
+
+	public User() {
+	}
+
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return enabled;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return enabled;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return enabled;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", createdAt=" + createdAt + ", modifiedAt=" + modifiedAt + ", username=" + username
+				+ ", authorities=" + authorities + ", fullName=" + fullName + ", projects=" + projects
+				+ ", notifications=" + notifications + ", phoneNumber=" + phoneNumber + ", address=" + address
+				+ ", email=" + email + ", school=" + school + ", gender=" + gender + "]";
+	}
+
+}

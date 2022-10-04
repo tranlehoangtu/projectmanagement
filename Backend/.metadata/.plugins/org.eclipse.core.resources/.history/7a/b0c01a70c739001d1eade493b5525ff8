@@ -1,0 +1,24 @@
+package com.javacode.Spring.Security;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.javacode.Spring.Security.service.StudentService;
+import com.javacode.Spring.Security.service.UserService;
+
+@SpringBootApplication
+public class Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+	@Bean
+	CommandLineRunner run(StudentService studentService) {
+		return args->{
+			System.out.println(studentService.findByUserId("6329dc2a5daa680c162f3d94").get());
+		};
+	}
+}

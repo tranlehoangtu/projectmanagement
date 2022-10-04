@@ -1,0 +1,36 @@
+package com.javacode.Spring.Security.api;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.javacode.Spring.Security.domain.dto.ListOfString;
+import com.javacode.Spring.Security.domain.model.Task;
+import com.javacode.Spring.Security.service.TaskService;
+
+import lombok.RequiredArgsConstructor;
+
+@CrossOrigin
+@RequestMapping("api")
+@RequiredArgsConstructor
+@RestController
+public class TaskApi {
+	private final TaskService taskService;
+
+	@PostMapping("tasks")
+	public ResponseEntity<List<Task>> getTasks(@RequestBody ListOfString listOfString) {
+
+		return ResponseEntity.ok().body(taskService.getTaskFromList(listOfString.getListOfString()));
+	}
+	
+	@PostMapping("task")
+	public ResponseEntity<Task> insertTask(@RequestBody Task task) {
+		System.out.println(task.toString());
+		return null;
+	}
+}

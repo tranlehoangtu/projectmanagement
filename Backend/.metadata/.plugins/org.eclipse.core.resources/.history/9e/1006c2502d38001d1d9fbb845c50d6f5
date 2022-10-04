@@ -1,0 +1,7 @@
+package com.javacode.project.domain.model.dto;
+
+@Getter
+public class AuthRequest {
+	private String username;
+	private String password;
+}

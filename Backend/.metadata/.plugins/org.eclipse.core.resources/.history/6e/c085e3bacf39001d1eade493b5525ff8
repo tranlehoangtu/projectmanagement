@@ -1,0 +1,35 @@
+package com.javacode.Spring.Security;
+
+import java.time.LocalDateTime;
+import java.util.Set;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.javacode.Spring.Security.domain.model.Role;
+import com.javacode.Spring.Security.domain.model.User;
+import com.javacode.Spring.Security.service.UserService;
+
+@SpringBootApplication
+public class Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+	@Bean
+	CommandLineRunner run(UserService userService) {
+		return args->{
+			User c001578 = new User();
+			c001578.setUsername("000413");
+			c001578.setPassword("1");
+			c001578.setCreatedAt(LocalDateTime.now());
+			c001578.setModifiedAt(LocalDateTime.now());
+			c001578.setAuthorities(Set.of(new Role(Role.MANAGEMENT)));
+			
+			userService.insertUser(c001578);
+		};
+	}
+}

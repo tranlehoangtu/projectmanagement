@@ -1,0 +1,30 @@
+package com.javacode.project;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.javacode.project.domain.User;
+import com.javacode.project.repository.RoleRepository;
+import com.javacode.project.service.UserService;
+
+@SpringBootApplication
+public class ProjectManagementApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ProjectManagementApplication.class, args);
+	}
+	
+	@Bean
+	CommandLineRunner run(UserService userService, RoleRepository roleRepository) {
+		return args -> {
+//			User b1805831 = ;
+			
+			for(User item: userService.findByUsername("b1805844")) {
+				System.out.println(item.toString());
+			}
+		};
+	}
+
+}

@@ -1,0 +1,11 @@
+package com.javacode.Spring.Security.repository;
+
+import java.util.Optional;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import com.javacode.Spring.Security.domain.model.Project;
+
+public interface ProjectRepo extends MongoRepository<Project, String> {
+	Optional<Project> findByProjectName(String projectName);
+}

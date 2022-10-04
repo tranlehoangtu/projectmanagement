@@ -1,0 +1,5 @@
+package com.javacode.Spring.Security.domain.model;
+
+public class Comment {
+
+}

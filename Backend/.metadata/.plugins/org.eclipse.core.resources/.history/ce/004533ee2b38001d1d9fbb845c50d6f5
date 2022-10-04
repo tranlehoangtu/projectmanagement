@@ -1,0 +1,51 @@
+package com.javacode.project.domain.model;
+
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Document(collection = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class User implements UserDetails {
+
+	private static final long serialVersionUID = 6636084715067294294L;
+
+	@Id
+	private ObjectId id;
+
+	@CreatedDate
+	private LocalDateTime createdAt;
+	@LastModifiedDate
+	private LocalDateTime modifiedAt;
+
+	private boolean enabled = true;
+
+	@Indexed(unique = true)
+	private String username;
+	private String password;
+	@Indexed
+	private String fullName;
+	private Set<Role> authorities = new HashSet<>();
+
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+
+}

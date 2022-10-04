@@ -1,0 +1,4 @@
+1664816104176	Extract local variable 'x'
+1664880862056	Rename method 'findByUserIdContaining'
+1664881630765	Rename method 'findByUserIdContaining'
+1664881637628	Rename method 'findByUserIdContainingAndAuthority'

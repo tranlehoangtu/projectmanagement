@@ -1,0 +1,57 @@
+package com.javacode.project.api;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.javacode.project.domain.Task;
+import com.javacode.project.service.TaskService;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/api/v1/task")
+@CrossOrigin
+public class TaskController {
+	private final TaskService taskService;
+
+	@GetMapping("")
+	public ResponseEntity<List<Task>> getAllTask() {
+
+		return ResponseEntity.ok().body(taskService.findAll());
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Task> getTaskById(@PathVariable("id") String id) {
+
+		return taskService.findById(id).map(task -> ResponseEntity.ok().body(task))
+				.orElseGet(() -> ResponseEntity.ok().body(null));
+	}
+
+	@PostMapping("/add")
+	public ResponseEntity<Task> insertTask(@RequestBody Task task) {
+//		Task rTask = taskService.insert(task);
+//		
+//		Project nProject = projectService.findById(rTask.getProjectId()).get();
+//		nProject.getTasks().add(rTask.getId());
+//
+//		projectService.save(nProject);
+		
+//		return ResponseEntity.ok().body(rTask);
+		return ResponseEntity.ok().body(taskService.insert(task));
+	}
+	
+	@DeleteMapping("/delete/{id}")
+	public void deleteTask(@PathVariable("id") String id) {
+		taskService.deleteById(id);
+	}
+}

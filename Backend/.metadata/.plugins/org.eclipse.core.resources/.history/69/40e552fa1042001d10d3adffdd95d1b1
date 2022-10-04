@@ -1,0 +1,6 @@
+package com.javacode.Spring.Security.domain.dto;
+
+public class UpdateProjectMembers {
+	private String projectId;
+	private List<String> members;
+}

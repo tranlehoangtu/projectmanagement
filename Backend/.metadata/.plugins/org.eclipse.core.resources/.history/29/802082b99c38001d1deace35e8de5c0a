@@ -1,0 +1,62 @@
+package com.javacode.Spring.Security.api;
+
+	import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.javacode.Spring.Security.domain.dto.AuthRequest;
+import com.javacode.Spring.Security.domain.dto.UserRes;
+import com.javacode.Spring.Security.domain.model.User;
+import com.javacode.Spring.Security.util.JwtTokenUtil;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+
+@RestController @RequestMapping(path = "api/public")
+@RequiredArgsConstructor
+@CrossOrigin
+public class AuthApi {
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenUtil jwtTokenUtil;
+
+    @PostMapping("login")
+    public ResponseEntity<UserRes> login(@RequestBody AuthRequest request ) {
+        try {
+            Authentication authenticate = authenticationManager
+                .authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                        request.getUsername(), request.getPassword()
+                    )
+                );
+
+            User user = (User) authenticate.getPrincipal();
+            UserRes userRes = new UserRes();
+            userRes.setJwt(jwtTokenUtil.generateToken(user));
+            return ResponseEntity.ok()
+                .header(
+                    HttpHeaders.AUTHORIZATION,
+                    jwtTokenUtil.generateToken(user)
+                )
+                .body(userRes);
+        } catch (BadCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+    
+    @GetMapping("free")
+    public String getString() {
+    	return "it's Free";
+    }
+
+}

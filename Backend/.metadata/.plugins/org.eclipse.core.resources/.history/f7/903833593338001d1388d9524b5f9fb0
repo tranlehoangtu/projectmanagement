@@ -1,0 +1,16 @@
+package com.javacode.Spring.Security.service.impl;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.javacode.Spring.Security.domain.model.User;
+import com.javacode.Spring.Security.repository.UserRepo;
+import com.javacode.Spring.Security.service.UserService;
+
+import lombok.RequiredArgsConstructor;
+
+@Service @RequiredArgsConstructor
+public class UserServiceImpl implements UserService{
+
+	
+}

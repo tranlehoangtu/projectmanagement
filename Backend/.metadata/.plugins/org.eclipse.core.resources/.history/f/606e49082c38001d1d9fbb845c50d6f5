@@ -1,0 +1,18 @@
+package com.javacode.project.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.javacode.project.domain.model.Task;
+
+public interface TaskService {
+
+	<S extends Task> S insert(S entity);
+
+	List<Task> findAll();
+
+	Optional<Task> findById(String id);
+
+	void deleteById(String id);
+
+}

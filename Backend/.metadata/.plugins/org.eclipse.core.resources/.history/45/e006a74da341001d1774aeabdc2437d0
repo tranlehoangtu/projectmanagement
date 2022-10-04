@@ -1,0 +1,22 @@
+package com.javacode.Spring.Security;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.javacode.Spring.Security.repository.TaskRepo;
+
+@SpringBootApplication
+public class Application {
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+	@Bean
+	CommandLineRunner run(TaskRepo taskRepo) {
+		return args -> {
+			System.out.println(taskRepo.findByMembers({"632095b1bfce5b4a9a1bf083"}));
+		};
+	}
+}

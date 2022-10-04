@@ -1,0 +1,9 @@
+package com.javacode.project.service;
+
+import com.javacode.project.domain.Role;
+
+public interface RoleService {
+
+	<S extends Role> S insert(S entity);
+
+}

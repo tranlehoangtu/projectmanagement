@@ -1,0 +1,31 @@
+package com.javacode.Spring.Security;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.javacode.Spring.Security.service.UserService;
+
+@SpringBootApplication
+public class Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+	@Bean
+	CommandLineRunner run(UserService service) {
+		return args -> {
+//			User user = new User();
+//			user.setUsername("b123");
+//			user.setPassword("1");
+//			user.setFullName("Mr One Two Three");
+//			user.setProjects(new ArrayList<>());
+//			user.setCreatedAt(LocalDateTime.now());
+//			user.setModifiedAt(LocalDateTime.now());
+//
+//			service.insertUser(user);
+		};
+	}
+}

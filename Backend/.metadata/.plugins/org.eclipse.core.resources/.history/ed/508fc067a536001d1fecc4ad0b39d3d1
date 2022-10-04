@@ -1,0 +1,5 @@
+package com.javacode.project.service.impl;
+
+public class RoleServiceImpl {
+
+}

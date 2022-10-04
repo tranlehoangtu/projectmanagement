@@ -1,0 +1,43 @@
+package com.javacode.Spring.Security.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.javacode.Spring.Security.domain.model.Project;
+import com.javacode.Spring.Security.repository.ProjectRepo;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class ProjectService {
+
+	private final ProjectRepo projectRepo;
+
+	public Optional<Project> findById(String id) {
+		return projectRepo.findById(id);
+	}
+
+	public List<Project> getProjectsFromList(List<String> projectsId) {
+		List<Project> result = new ArrayList<>();
+		projectsId.forEach(projectId -> result.add(projectRepo.findById(projectId).get()));
+
+		return result;
+	}
+
+	public Project save(Project project) {
+		return projectRepo.save(project);
+	}
+
+	public Project insert(Project project) {
+		return projectRepo.insert(project);
+	}
+
+	public void delete(Project entity) {
+		projectRepo.delete(entity);
+	}
+
+}

@@ -1,0 +1,37 @@
+package com.javacode.Spring.Security;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Set;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.javacode.Spring.Security.domain.model.Role;
+import com.javacode.Spring.Security.domain.model.User;
+import com.javacode.Spring.Security.service.UserService;
+
+@SpringBootApplication
+public class Application {
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+	@Bean
+	CommandLineRunner run(UserService userService) {
+		return args -> {
+			User user = new User();
+			user.setAuthorities(Set.of(new Role(Role.MANAGEMENT)));
+			user.setCreatedAt(new Date());
+			user.setFullName("Lâm Quốc Anh");
+			user.setModifiedAt(new Date());
+			user.setPassword("1");
+			user.setUsername("001056");
+			user.setProjects(new ArrayList<>());
+
+			userService.insertUser(user);
+		};
+	}
+}

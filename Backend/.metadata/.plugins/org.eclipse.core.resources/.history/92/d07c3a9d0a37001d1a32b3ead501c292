@@ -1,0 +1,10 @@
+package com.javacode.project.service;
+
+import java.util.List;
+
+import com.javacode.project.domain.User;
+
+public interface UserService {
+
+	List<User> findAll();
+}

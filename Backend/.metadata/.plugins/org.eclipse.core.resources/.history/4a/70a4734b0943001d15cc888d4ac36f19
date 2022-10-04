@@ -1,0 +1,11 @@
+package com.javacode.Spring.Security.domain.dto;
+
+public class UserUpdate {
+	private String fullName;
+	private String phoneNumber;
+	private String address;
+	private String email;
+	private String school;
+	private String gender;
+
+}

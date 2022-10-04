@@ -1,0 +1,40 @@
+package com.javacode.Spring.Security;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.javacode.Spring.Security.domain.model.Task;
+import com.javacode.Spring.Security.service.TaskService;
+
+@SpringBootApplication
+public class Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+	@Bean
+	CommandLineRunner run(TaskService taskService) {
+		return args->{
+			Task task = new Task();
+			task.setName("Lập trình");
+			task.setContents("Đây là nội dung");
+			task.setMembers(List.of("6320675dc3e2454a824cd613", "63206746c3e2454a824cd612"));
+			task.setTimespan("42 ngày");
+			task.setDueDate(LocalDate.now());
+			task.setStatus("Đang chờ");
+			task.setProjectId("6320955ebfce5b4a9a1bf082");
+			task.setCreateBy("6320675dc3e2454a824cd613");
+			task.setCreateAt(LocalDateTime.now());
+			task.setEditAt(LocalDateTime.now());
+			
+			taskService.insert(task);
+		};
+	}
+}

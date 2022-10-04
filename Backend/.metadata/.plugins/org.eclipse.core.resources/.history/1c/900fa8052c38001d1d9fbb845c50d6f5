@@ -1,0 +1,40 @@
+package com.javacode.project.service.impl;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.javacode.project.domain.model.Task;
+import com.javacode.project.repository.TaskRepository;
+import com.javacode.project.service.TaskService;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class TaskServiceImpl implements TaskService {
+
+	private final TaskRepository taskRepository;
+
+	@Override
+	public List<Task> findAll() {
+		return taskRepository.findAll();
+	}
+
+	@Override
+	public <S extends Task> S insert(S entity) {
+		return taskRepository.insert(entity);
+	}
+
+	@Override
+	public Optional<Task> findById(String id) {
+		return taskRepository.findById(id);
+	}
+
+	@Override
+	public void deleteById(String id) {
+		taskRepository.deleteById(id);
+	}
+
+}

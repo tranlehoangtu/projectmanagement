@@ -1,0 +1,28 @@
+package com.javacode.Spring.Security;
+
+import java.util.List;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.javacode.Spring.Security.domain.model.User;
+import com.javacode.Spring.Security.service.UserService;
+
+@SpringBootApplication
+public class Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+	@Bean
+	CommandLineRunner run(UserService userService) {
+		return args -> {
+			User user = userService.findById("632b3538009cd623de48ddc4").get();
+			user.setCommentIds(List.of("6333bd5316d26120b20a5536"));
+			userService.save(user);
+		};
+	}
+}

@@ -1,0 +1,5 @@
+package com.javacode.project.repository;
+
+public interface UserRepo {
+
+}

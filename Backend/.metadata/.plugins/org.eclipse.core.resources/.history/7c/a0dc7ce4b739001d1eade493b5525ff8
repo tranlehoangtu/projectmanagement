@@ -1,0 +1,33 @@
+package com.javacode.Spring.Security.repository;
+
+import java.util.Optional;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+import com.javacode.Spring.Security.domain.model.User;
+
+@Repository
+public interface UserRepo extends MongoRepository<User, String> {
+	Optional<User> findByUsername(String username);
+
+}
+
+//interface UserRepoCustom {
+//	List<String> getProjects();
+//}
+//
+//@RequiredArgsConstructor
+//class UserRepoCustomImpl implements UserRepoCustom {
+//	private final MongoTemplate mongoTemplate;
+//
+//	@Override
+//	public List<String> getProjects() {
+//		
+//		Query query = new Query();
+//		query.addCriteria(Criteria.where("id").is("6329dc2a5daa680c162f3d94"));
+//		List<User> users = mongoTemplate.find(query, User.class);
+//		
+//		return users;
+//	}
+//}

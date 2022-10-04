@@ -1,0 +1,36 @@
+package com.javacode.project.service.impl;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.javacode.project.domain.Role;
+import com.javacode.project.repository.RoleRepository;
+import com.javacode.project.service.RoleService;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class RoleServiceImpl implements RoleService{
+	private final RoleRepository roleRepository;
+
+	@Override
+	public <S extends Role> S insert(S entity) {
+		return roleRepository.insert(entity);
+	}
+	
+	@Override
+	public Optional<Role> findByName(String name) {
+		return roleRepository.findByName(name);
+	}
+
+	@Override
+	public List<Role> findAll() {
+		return roleRepository.findAll();
+	}
+	
+	
+
+}
